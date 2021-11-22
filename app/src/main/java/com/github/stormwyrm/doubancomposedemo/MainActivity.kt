@@ -7,32 +7,33 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.tooling.preview.Preview
+import com.github.stormwyrm.doubancomposedemo.ui.screens.SplashScreen
 import com.github.stormwyrm.doubancomposedemo.ui.theme.DoubanComposeDemoTheme
+import com.google.accompanist.insets.ProvideWindowInsets
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            DoubanComposeDemoTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(color = MaterialTheme.colors.background) {
-                    Greeting("Android")
-                }
-            }
+            ComposeDoubanUI()
         }
     }
 }
 
-@Composable
-fun Greeting(name: String) {
-    Text(text = "Hello $name!")
+enum class AppState {
+    Splash,
+    Home
 }
 
-@Preview(showBackground = true)
 @Composable
-fun DefaultPreview() {
+fun ComposeDoubanUI() {
     DoubanComposeDemoTheme {
-        Greeting("Android")
+        ProvideWindowInsets() {
+            var appState = remember { mutableStateOf(AppState.Splash) }
+
+        }
     }
 }
