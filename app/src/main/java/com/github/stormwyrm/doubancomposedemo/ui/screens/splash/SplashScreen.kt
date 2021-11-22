@@ -1,13 +1,15 @@
-package com.github.stormwyrm.doubancomposedemo.ui.screens
+package com.github.stormwyrm.doubancomposedemo.ui.screens.splash
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -17,26 +19,55 @@ import androidx.compose.ui.unit.dp
 import com.github.stormwyrm.doubancomposedemo.R
 import com.github.stormwyrm.doubancomposedemo.ui.theme.DoubanComposeDemoTheme
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.*
 import java.text.SimpleDateFormat
 import java.util.*
 
+private const val TIME = 3
+
 @Composable
 fun SplashScreen(onSplashCompleted: () -> Unit) {
-    rememberSystemUiController().setNavigationBarColor(Color.Transparent, darkIcons = true)
+    rememberSystemUiController().setStatusBarColor(Color.Transparent, darkIcons = true)
     Surface(
         Modifier
             .fillMaxWidth()
+            .fillMaxHeight()
             .background(MaterialTheme.colors.background)
     ) {
         Box(
             modifier = Modifier
+                .fillMaxWidth()
                 .background(MaterialTheme.colors.background)
                 .padding(16.dp)
         ) {
+
+            val time = mutableStateOf(TIME)
+
             LaunchedEffect(Unit) {
-                delay(1000L)
-                onSplashCompleted()
+                flow {
+                    for (index in TIME downTo 0) {
+                        emit(index)
+                        delay(1000L)
+                    }
+                }.flowOn(Dispatchers.Main)
+                    .onCompletion { onSplashCompleted() }
+                    .onEach { time.value = it }
+                    .launchIn(this)
+            }
+
+            Card(
+                shape = MaterialTheme.shapes.medium,
+                modifier = Modifier
+                    .align(Alignment.TopEnd)
+                    .padding(10.dp),
+            ) {
+                Text(
+                    text = "${time.value}s",
+                    modifier = Modifier
+                        .padding(start = 8.dp, end = 8.dp)
+                )
             }
 
             Column(
