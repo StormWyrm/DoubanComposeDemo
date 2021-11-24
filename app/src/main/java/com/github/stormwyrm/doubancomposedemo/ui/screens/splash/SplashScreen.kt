@@ -115,7 +115,7 @@ fun SplashScreen(onSplashCompleted: () -> Unit) {
 
 @Preview(showSystemUi = true)
 @Composable
-fun SplashScreenPrew() {
+private fun SplashScreenPrew() {
     DoubanComposeDemoTheme {
         SplashScreen {
 

@@ -10,6 +10,7 @@ import androidx.core.view.WindowCompat
 import com.github.stormwyrm.doubancomposedemo.ui.screens.home.HomeScreen
 import com.github.stormwyrm.doubancomposedemo.ui.screens.splash.SplashScreen
 import com.github.stormwyrm.doubancomposedemo.ui.theme.DoubanComposeDemoTheme
+import com.google.accompanist.insets.ProvideWindowInsets
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,15 +30,17 @@ enum class AppState {
 @Composable
 fun ComposeDoubanUI() {
     DoubanComposeDemoTheme {
-        val (appState, setAppState) = remember { mutableStateOf(AppState.Splash) }
+        ProvideWindowInsets {
+            val (appState, setAppState) = remember { mutableStateOf(AppState.Splash) }
 
-        when (appState) {
-            AppState.Splash -> {
-                SplashScreen { setAppState(AppState.Home) }
-            }
+            when (appState) {
+                AppState.Splash -> {
+                    SplashScreen { setAppState(AppState.Home) }
+                }
 
-            AppState.Home -> {
-                HomeScreen()
+                AppState.Home -> {
+                    HomeScreen()
+                }
             }
         }
 
